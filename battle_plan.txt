@@ -40,3 +40,19 @@ life point stage -> remove or add points \-> if less than or equal 0 -> end stag
                                          
 end stage \-> if player 1 0 or less -> player 2 win screen
           |-> if player 2 0 or less -> player 1 win screen
+          
+############
+##Road Map##
+############
+ascii board
+Just normal monsters
+Monsters with attributes
+magic cards
+monster effects
+traps
+then who knows?
+
+
+csv for importing cards
+stats then say if it has an effect
+next line would be monster effect, treat effect like separate effect?
