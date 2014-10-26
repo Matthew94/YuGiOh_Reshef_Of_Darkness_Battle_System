@@ -1,0 +1,23 @@
+battle start
+
+player 1 draw 5
+player 2 draw 5
+
+player 1 turn
+choice stage -> set card -> check all traps -> activate and resolve trap -> back to choice stage
+             ->                             -> back to choice stage
+             -> monster card action -> attack -> check traps -> activate and resolve trap -> back to choice stage
+             ->                     ->                       ->                           -> continue attack -> resolve attack -> back to choice stage
+             ->                     ->                       -> continue attack -> resolve attack -> back to choice stage
+             ->                     -> defend
+             ->                     -> tribute -> increment tribute count -> destroy card
+             ->                     -> effect -> run effect
+             -> magic card action -> activate and resolve effect
+             -> read description -> print card statistics
+             -> discard -> destroy card
+             -> end turn -> tribute count to 0 -> player 2 turn
+
+trap check stage
+
+attack stage
+
