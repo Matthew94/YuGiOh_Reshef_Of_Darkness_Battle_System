@@ -1,38 +1,38 @@
-battle start
+                                             ################
+main -> choose start player -> draw stage -> # choice stage #
+                                             ################
 
-player 1 draw 5
-player 2 draw 5
+draw stage -> each draw 5 cards -> return
 
-player 1 turn
-
-choice stage \-> set card -> trap check stage -> return
-             |-> monster card action \-> attack -> trap check stage \-> return
-             |->                     |->                            |-> continue attack -> resolve attack
-             |->                     |-> defend
-             |->                     |-> tribute -> increment tribute count -> destroy card
-             |->                     |-> effect -> trap check stage -> run effect
-             |-> magic card action -> trap check stage \-> activate and resolve effect -> remove card
-             |->                                       |-> return
-             |-> read description -> print card statistics
-             |-> discard -> destroy card
-             |-> end turn -> tribute count to 0 -> player 2 turn
+choice stage -> draw a card \-> set card -> trap check stage -> return
+                            |-> monster card action \-> attack stage -> return
+                            |->                     |-> defend -> return
+                            |->                     |-> tribute -> increment tribute count -> destroy card -> return
+                            |->                     |-> effect -> trap check stage -> card effect stage -> return
+                            |-> magic card action -> trap check stage \-> magic stage -> return
+                            |->                                       |-> return
+                            |-> read description -> print card statistics -> return
+                            |-> discard -> destroy card
+                            |-> end turn -> tribute count to 0 -> player 2 turn
 
 trap check stage \-> attack           \-> check can activate \-> do effect -> remove trap  -> return
                  |-> summon           /->                    |-> return
                  |-> magic place      /->
                  |-> magic activation /->
                  
-magic stage -> trap check stage \-> magic effect -> return
+magic stage -> trap check stage \-> magic effect -> remove card -> return
                                 |-> return
+                                
+card effect stage -> return
 
-attack stage -> trap card stage \> compare types \-> if type advantage -> destroy enemy \-> if enemy in attack mode \-> if stronger -> calculate life point diff -> life point stage -> return
-                                |->              |->                                    |->                         |-> return
-                                |->              |->                                    |-> calculate life point diff -> if enemy in defence -> return
-                                |->              |-> if type weakness -> destroy self \-> if stronger or equal -> return
-                                |->              |->                                  |-> if weaker -> calculate life point diff -> life point stage -> return
-                                |->              |-> if no type clash \-> if stronger -> destroy enemy -> calculate life point diff -> life point stage -> return
-                                |->                                   |-> if the same -> destroy both -> return
-                                |->                                   |-> if weaker -> destroy self -> calculate life point diff -> life point stage -> return
+attack stage -> trap card stage \-> compare types \-> if type advantage -> destroy enemy \-> if enemy in attack mode \-> if stronger -> calculate life point diff -> life point stage -> return
+                                |->               |->                                    |->                         |-> return
+                                |->               |->                                    |-> calculate life point diff -> if enemy in defence -> return
+                                |->               |-> if type weakness -> destroy self \-> if stronger or equal -> return
+                                |->               |->                                  |-> if weaker -> calculate life point diff -> life point stage -> return
+                                |->               |-> if no type clash \-> if stronger -> destroy enemy -> calculate life point diff -> life point stage -> return
+                                |->                                    |-> if the same -> destroy both -> return
+                                |->                                    |-> if weaker -> destroy self -> calculate life point diff -> life point stage -> return
                                 |-> return if negated/destroyed
 
 life point stage -> remove or add points \-> if less than or equal 0 -> end stage
