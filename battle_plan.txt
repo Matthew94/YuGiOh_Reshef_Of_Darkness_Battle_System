@@ -4,20 +4,39 @@ player 1 draw 5
 player 2 draw 5
 
 player 1 turn
-choice stage -> set card -> check all traps -> activate and resolve trap -> back to choice stage
-             ->                             -> back to choice stage
-             -> monster card action -> attack -> check traps -> activate and resolve trap -> back to choice stage
-             ->                     ->                       ->                           -> continue attack -> resolve attack -> back to choice stage
-             ->                     ->                       -> continue attack -> resolve attack -> back to choice stage
-             ->                     -> defend
-             ->                     -> tribute -> increment tribute count -> destroy card
-             ->                     -> effect -> run effect
-             -> magic card action -> activate and resolve effect
-             -> read description -> print card statistics
-             -> discard -> destroy card
-             -> end turn -> tribute count to 0 -> player 2 turn
 
-trap check stage
+choice stage \-> set card -> trap check stage -> return
+             |-> monster card action \-> attack -> trap check stage \-> return
+             |->                     |->                            |-> continue attack -> resolve attack
+             |->                     |-> defend
+             |->                     |-> tribute -> increment tribute count -> destroy card
+             |->                     |-> effect -> trap check stage -> run effect
+             |-> magic card action -> trap check stage \-> activate and resolve effect -> remove card
+             |->                                       |-> return
+             |-> read description -> print card statistics
+             |-> discard -> destroy card
+             |-> end turn -> tribute count to 0 -> player 2 turn
 
-attack stage
+trap check stage \-> attack           \-> check can activate \-> do effect -> remove trap  -> return
+                 |-> summon           /->                    |-> return
+                 |-> magic place      /->
+                 |-> magic activation /->
+                 
+magic stage -> trap check stage \-> magic effect -> return
+                                |-> return
 
+attack stage -> trap card stage \> compare types \-> if type advantage -> destroy enemy \-> if enemy in attack mode \-> if stronger -> calculate life point diff -> life point stage -> return
+                                |->              |->                                    |->                         |-> return
+                                |->              |->                                    |-> calculate life point diff -> if enemy in defence -> return
+                                |->              |-> if type weakness -> destroy self \-> if stronger or equal -> return
+                                |->              |->                                  |-> if weaker -> calculate life point diff -> life point stage -> return
+                                |->              |-> if no type clash \-> if stronger -> destroy enemy -> calculate life point diff -> life point stage -> return
+                                |->                                   |-> if the same -> destroy both -> return
+                                |->                                   |-> if weaker -> destroy self -> calculate life point diff -> life point stage -> return
+                                |-> return if negated/destroyed
+
+life point stage -> remove or add points \-> if less than or equal 0 -> end stage
+                                         |-> if more than 0 -> return
+                                         
+end stage \-> if player 1 0 or less -> player 2 win screen
+          |-> if player 2 0 or less -> player 1 win screen
