@@ -27,3 +27,4 @@ def BattleClass(object):
         pass
     def update_life_points(self, change, player):
         pass
+    

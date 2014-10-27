@@ -56,3 +56,9 @@ then who knows?
 csv for importing cards
 stats then say if it has an effect
 next line would be monster effect, treat effect like separate effect?
+
+csv normal monster structure:
+card type, title, description, card number, type, level, attack, defence, attribute, element
+
+csv normal monster example:
+Normal Monster,Dark Magician,The ultimate wizard in terms of attack and defense,46986414,Spellcaster,7,2500,2100,DARK,Shadow
