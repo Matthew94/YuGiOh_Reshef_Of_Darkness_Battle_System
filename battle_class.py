@@ -9,7 +9,8 @@ def BattleClass(object):
                       "Shadow":"Light",
                       "Light":"Fiend",
                       "Fiend":"Dream",
-                      "Dream":"Shadow"}
+                      "Dream":"Shadow",
+                      "Divine":"Ignore"}
     def attack(self, attacker, defender):
         #If type advantage
         if type_diffs[attacker.element] == defender.element:
