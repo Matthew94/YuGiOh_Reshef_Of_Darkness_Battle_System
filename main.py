@@ -3,26 +3,42 @@ from random import randint, shuffle
 class Player(object):
     def __init__(self):
         self.life_points = 8000
-        
-        
-        
-def begin_battle():
-    """Program to simulate a battle from Yu-Gi-Oh: Reshef of Destruction."""
-    players = [Player(),Player()]
-    self.field = [[None] * 5, [None] * 5],
-                  [None] * 5, [None] * 5]]
-    
-    self.hand = [[None] * 5, [None] * 5]
-    
-    coin_result = coin_toss() 
-    
-    if coin_result == 1:
-        print("Player 1")
-    elif coin_result == 0:
-        print("Player 2")
-    else:
-        return
+        self.hand = [[None] * 5, [None] * 5]
 
+class Card(object):
+    def __init__(self):
+        self.attack = 2500
+
+def begin_battle():
+    """Program to simulate a battle from Yu-Gi-Oh: Reshef of Destruction.
+    
+    players: list of two player objects
+    board: list with two lists that each have two lists of 5 slots
+    
+    """
+    players = [Player(),Player()]
+    board = [[[None] * 5, [None] * 5], [[None] * 5, [None] * 5]]
+    
+    board[0][0][0] = Card()
+    
+    print_board(board)
+    
+    
+
+def print_board(board):
+    board_txt = ["","","",""]
+
+    for i in range(len(board)):
+        for j in range(len(board[i])):
+            for k in range(len(board[i][j])):
+                if board[i][j][k] == None:
+                    board_txt[(i * 2) + j] += "0 "
+                else:
+                    board_txt[(i * 2) + j] += "1 "
+                    
+    print("Player One:\n{0}\n{1}\n\n{2}\n{3}\n".format(
+        board_txt[1], board_txt[0], board_txt[2], board_txt[3]))
+    
 def coin_toss():
     """Asks player one to choose a coin.
     Returns 1 if player one is first.
