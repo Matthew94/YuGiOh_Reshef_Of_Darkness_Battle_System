@@ -1,5 +1,10 @@
 from random import randint, shuffle
 
+try:
+    input = raw_input
+except:
+    pass
+
 class Card(object):
     def __init__(self, title = "Dark Magician", type = "Monster"):
         self.title = title
@@ -23,7 +28,6 @@ def begin_battle():
 
     players: list of two player objects
     board: list with two lists that each have two lists of 5 slots
-
     """
     # Setting up players
     players = [Player("1"),Player("2")]
@@ -34,25 +38,26 @@ def begin_battle():
 
     starting_draw(players)
 
-    print_hand(players[0])
-    print_hand(players[1])
-    print_board(board)
+    i = coin_toss()
+    print("\nBattle starting")
+    while(players[0].life_points > 0 and players[1].life_points > 0):
+        j = i % 2
+        draw_card(players[j])
+        players[j].life_points = 0
+    declare_winner(players)
 
-    place_card_on_board(board[0], players[0].hand, 0, 0)
-    place_card_on_board(board[0], players[0].hand, 0, 1)
-    place_card_on_board(board[0], players[0].hand, 0, 2)
+def choose_move():
+    pass
+
+def declare_winner(players):
+    winner = 2
+    if(players[0].life_points > 0):
+        winner = 1
+    print("\nPlayer {0} has won!".format(winner))
     
-    place_card_on_board(board[1], players[1].hand, 0, 0)
-    place_card_on_board(board[1], players[1].hand, 0, 1)
-    place_card_on_board(board[1], players[1].hand, 0, 2)
-
-
-    print_hand(players[0])
-    print_hand(players[1])
-    print_board(board)
 
 def place_card_on_board(board_side, hand, hand_pos, position):
-    print("\nPlaying: {0} ({1})".format(hand[hand_pos].title,
+    print("Playing: {0} ({1})".format(hand[hand_pos].title,
                                      hand[hand_pos].type))
 
     if hand[hand_pos].type == "Monster":
@@ -72,7 +77,7 @@ def print_board(board):
                 if board[i][j][k] == None:
                     board_txt[(i * 2) + j] += "0\t"
                 else:
-                    board_txt[(i * 2) + j] += board[i][j][k].title + "\t"
+                    board_txt[(i * 2) + j] += "1\t"
 
     print("""
 Player One:
@@ -81,7 +86,8 @@ Monst: {1}
 
 Monst: {2}
 Spell: {3}
-Player 2:""".format(board_txt[1], board_txt[0], board_txt[2],
+Player 2:
+""".format(board_txt[1], board_txt[0], board_txt[2],
                     board_txt[3]))
 
 def print_hand(player):
@@ -93,12 +99,18 @@ def print_hand(player):
 def draw_card(player):
     """Works"""
     player.hand.append(player.deck[0])
+    print("Player {0} drew a [{1}].".format(player.number,
+                                          player.deck[0].title))
     del player.deck[0]
 
 def starting_draw(players):
+    print("\nPlayer 1 starting draw.")
     for i in range(5):
         draw_card(players[0])
+    print("\nPlayer 2 starting draw.")
+    for i in range(5):
         draw_card(players[1])
+    print
 
 def shuffle_decks(players):
     """Works"""
@@ -113,7 +125,7 @@ def coin_toss():
     Returns 2 if neither is chosen.
     """
     choice = input("Player one: Heads or tails?\nChoice: ").lower()
-    print(choice)
+
     roll = randint(0,1)
 
     if choice == 'heads':
@@ -124,9 +136,11 @@ def coin_toss():
         return 2
 
     if choice == roll:
-        return 1
-    else:
+        print("\nPlayer one is first.")
         return 0
+    else:
+        print("\nPlayer two is first.")
+        return 1
 
 if __name__ == '__main__':
     begin_battle()
