@@ -70,9 +70,9 @@ def print_board(board):
         for j in range(len(board[i])):
             for k in range(len(board[i][j])):
                 if board[i][j][k] == None:
-                    board_txt[(i * 2) + j] += "0 "
+                    board_txt[(i * 2) + j] += "0\t"
                 else:
-                    board_txt[(i * 2) + j] += "1 "
+                    board_txt[(i * 2) + j] += board[i][j][k].title + "\t"
 
     print("""
 Player One:
