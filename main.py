@@ -1,21 +1,22 @@
 from random import randint, shuffle
 
 class Card(object):
-    def __init__(self, title = "Dark Magician"):
+    def __init__(self, title = "Dark Magician", type = "Monster"):
         self.title = title
         self.attack = 2500
+        self.type = type
 
 class Player(object):
     def __init__(self, number = "0"):
         self.number = number
         self.life_points = 8000
         self.hand = []
-        self.deck = [Card("Jim"), Card("Tom"), Card("Harry"),
-                     Card("Bob"), Card("Ollie"), Card("Jimmy"),
-                     Card("Sam"), Card("Sampson"), Card("Matthew"),
+        self.deck = [Card("Jim","Magic"), Card("Tom","Trap"), Card("Harry"),
+                     Card("Bob","Trap"), Card("Ollie","Magic"), Card("Jimmy"),
+                     Card("Sam"), Card("pop","Magic"), Card("Matthew","Trap"),
                      Card("Corner"), Card("Ross"), Card("Datasheet"),
-                     Card("Cor-ner"), Card("Oven"), Card("Microwave"),
-                     Card("Dillon"), Card("Oscar"), Card("Balloon")]
+                     Card("Cor-ner"), Card("Oven","Magic"), Card("Microwave"),
+                     Card("Earl","Trap"), Card("lel"), Card("Kek","Magic")]
 
 def begin_battle():
     """Program to simulate a battle from Yu-Gi-Oh: Reshef of Destruction.
@@ -27,13 +28,39 @@ def begin_battle():
     # Setting up players
     players = [Player("1"),Player("2")]
     players = shuffle_decks(players)
-    
+
     # Setting up board
     board = [[[None] * 5, [None] * 5], [[None] * 5, [None] * 5]]
 
     starting_draw(players)
+
     print_hand(players[0])
     print_hand(players[1])
+    print_board(board)
+
+    place_card_on_board(board[0], players[0].hand, 0, 0)
+    place_card_on_board(board[0], players[0].hand, 0, 1)
+    place_card_on_board(board[0], players[0].hand, 0, 2)
+    
+    place_card_on_board(board[1], players[1].hand, 0, 0)
+    place_card_on_board(board[1], players[1].hand, 0, 1)
+    place_card_on_board(board[1], players[1].hand, 0, 2)
+
+
+    print_hand(players[0])
+    print_hand(players[1])
+    print_board(board)
+
+def place_card_on_board(board_side, hand, hand_pos, position):
+    print("\nPlaying: {0} ({1})".format(hand[hand_pos].title,
+                                     hand[hand_pos].type))
+
+    if hand[hand_pos].type == "Monster":
+        board_side[0][position] = hand[hand_pos]
+        del hand[hand_pos]
+    elif hand[hand_pos].type == "Magic" or "Trap":
+        board_side[1][position] = hand[hand_pos]
+        del hand[hand_pos]
 
 def print_board(board):
     """Works"""
@@ -47,23 +74,32 @@ def print_board(board):
                 else:
                     board_txt[(i * 2) + j] += "1 "
 
-    print("Player One:\n{0}\n{1}\n\n{2}\n{3}\n".format(
-        board_txt[1], board_txt[0], board_txt[2], board_txt[3]))
+    print("""
+Player One:
+Spell: {0}
+Monst: {1}
+
+Monst: {2}
+Spell: {3}
+Player 2:""".format(board_txt[1], board_txt[0], board_txt[2],
+                    board_txt[3]))
 
 def print_hand(player):
+    """Works"""
     print("\nPlayer {0}'s hand:".format(player.number))
     for card in player.hand:
-        print(card.title)
+        print("{0} ({1})".format(card.title, card.type))
 
 def draw_card(player):
+    """Works"""
     player.hand.append(player.deck[0])
     del player.deck[0]
-    
+
 def starting_draw(players):
     for i in range(5):
         draw_card(players[0])
         draw_card(players[1])
-    
+
 def shuffle_decks(players):
     """Works"""
     shuffle(players[0].deck)
