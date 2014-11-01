@@ -45,20 +45,23 @@ def begin_battle():
 
 def battle_loop(players, board):
     i = coin_toss()
+    print("\nPlayer {0} is first.\n".format(i + 1))
+    
     while(players[0].life_points > 0 and players[1].life_points > 0):
         j = i % 2
 
-        print("Player {0}'s turn.\n".format(players[j].number))
+        print("##Player {0}'s turn.##".format(players[j].number))
         draw_card(players[j])
 
-        move  = choose_move(players[j])
+        while(1):
+            move  = choose_move(players[j])
 
-        if move == 0:
-            pass
-        elif move == 1:
-            pass
-        elif move == 2:
-            pass
+            if move == '0':
+                break
+            elif move == '1':
+                break
+            elif move == '2':
+                break
 
         players[j].life_points = 0
 
@@ -66,9 +69,8 @@ def choose_move(player):
     print("""
 0: Check life points
 1: View hand
-2: View field
-""")
-    return = input("Make a choice: ")
+2: View field""")
+    return input("Make a choice: ")
 
 def declare_winner(players):
     winner = 2
@@ -145,22 +147,21 @@ def coin_toss():
 
     Returns 2 if neither is chosen.
     """
-    choice = input("Player one: Heads or tails?\nChoice: ").lower()
-
     roll = randint(0,1)
+    
+    choice = ""
+    
+    while choice != "heads" and "tails":
+        choice = input("Player one: Heads or tails?\nChoice: ").lower()
 
     if choice == 'heads':
         choice = 1
     elif choice == 'tails':
         choice = 0
-    else:
-        return 2
 
     if choice == roll:
-        print("\nPlayer one is first.")
         return 0
     else:
-        print("\nPlayer two is first.")
         return 1
 
 if __name__ == '__main__':
