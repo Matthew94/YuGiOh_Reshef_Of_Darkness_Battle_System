@@ -38,23 +38,44 @@ def begin_battle():
 
     starting_draw(players)
 
-    i = coin_toss()
-    print("\nBattle starting")
-    while(players[0].life_points > 0 and players[1].life_points > 0):
-        j = i % 2
-        draw_card(players[j])
-        players[j].life_points = 0
+    print("\nBattle starting\n")
+    battle_loop(players, board)
+
     declare_winner(players)
 
-def choose_move():
-    pass
+def battle_loop(players, board):
+    i = coin_toss()
+    while(players[0].life_points > 0 and players[1].life_points > 0):
+        j = i % 2
+
+        print("Player {0}'s turn.\n".format(players[j].number))
+        draw_card(players[j])
+
+        move  = choose_move(players[j])
+
+        if move == 0:
+            pass
+        elif move == 1:
+            pass
+        elif move == 2:
+            pass
+
+        players[j].life_points = 0
+
+def choose_move(player):
+    print("""
+0: Check life points
+1: View hand
+2: View field
+""")
+    return = input("Make a choice: ")
 
 def declare_winner(players):
     winner = 2
     if(players[0].life_points > 0):
         winner = 1
     print("\nPlayer {0} has won!".format(winner))
-    
+
 
 def place_card_on_board(board_side, hand, hand_pos, position):
     print("Playing: {0} ({1})".format(hand[hand_pos].title,
