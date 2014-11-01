@@ -6,10 +6,16 @@ class Card(object):
         self.attack = 2500
 
 class Player(object):
-    def __init__(self):
+    def __init__(self, number = "0"):
+        self.number = number
         self.life_points = 8000
         self.hand = []
-        self.deck = [Card("Jim"), Card("Tom"), Card("Harry")]
+        self.deck = [Card("Jim"), Card("Tom"), Card("Harry"),
+                     Card("Bob"), Card("Ollie"), Card("Jimmy"),
+                     Card("Sam"), Card("Sampson"), Card("Matthew"),
+                     Card("Corner"), Card("Ross"), Card("Datasheet"),
+                     Card("Cor-ner"), Card("Oven"), Card("Microwave"),
+                     Card("Dillon"), Card("Oscar"), Card("Balloon")]
 
 def begin_battle():
     """Program to simulate a battle from Yu-Gi-Oh: Reshef of Destruction.
@@ -19,14 +25,15 @@ def begin_battle():
 
     """
     # Setting up players
-    players = [Player(),Player()]
+    players = [Player("1"),Player("2")]
     players = shuffle_decks(players)
     
     # Setting up board
     board = [[[None] * 5, [None] * 5], [[None] * 5, [None] * 5]]
 
-
-
+    starting_draw(players)
+    print_hand(players[0])
+    print_hand(players[1])
 
 def print_board(board):
     """Works"""
@@ -43,8 +50,19 @@ def print_board(board):
     print("Player One:\n{0}\n{1}\n\n{2}\n{3}\n".format(
         board_txt[1], board_txt[0], board_txt[2], board_txt[3]))
 
+def print_hand(player):
+    print("\nPlayer {0}'s hand:".format(player.number))
+    for card in player.hand:
+        print(card.title)
+
 def draw_card(player):
-    pass
+    player.hand.append(player.deck[0])
+    del player.deck[0]
+    
+def starting_draw(players):
+    for i in range(5):
+        draw_card(players[0])
+        draw_card(players[1])
     
 def shuffle_decks(players):
     """Works"""
