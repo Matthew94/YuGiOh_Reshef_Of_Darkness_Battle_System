@@ -29,6 +29,8 @@ def begin_battle():
     players: list of two player objects
     board: list with two lists that each have two lists of 5 slots
     """
+    print("It's time to Duh-Duh-Duh-Duh-D-D-D-D-D-D-D-D-Duelllllll!!!!!!")
+
     # Setting up players
     players = [Player("1"),Player("2")]
     players = shuffle_decks(players)
@@ -38,38 +40,55 @@ def begin_battle():
 
     starting_draw(players)
 
-    print("\nBattle starting\n")
+    print("\nBattle starting.")
     battle_loop(players, board)
 
     declare_winner(players)
 
 def battle_loop(players, board):
     i = coin_toss()
-    print("\nPlayer {0} is first.\n".format(i + 1))
-    
+    print("Player {0} is first.\n".format(i + 1))
+
     while(players[0].life_points > 0 and players[1].life_points > 0):
         j = i % 2
 
         print("##Player {0}'s turn.##".format(players[j].number))
         draw_card(players[j])
 
-        while(1):
-            move  = choose_move(players[j])
-
-            if move == '0':
-                break
-            elif move == '1':
-                break
-            elif move == '2':
-                break
+        choose_move(players, j, board)
 
         players[j].life_points = 0
 
-def choose_move(player):
+def choose_move(players, j, board):
+    while(1):
+        move  = get_move(players[j])
+
+        # Player moves
+        if move == '-1':
+            break
+        elif move == '0':
+            print("\nYou have {0} "
+                  "life points.".format(players[j].life_points))
+        elif move == '1':
+            print_hand(players[j])
+        # Hand moves
+        elif move == '2':
+            print_hand_card_details(players[j])
+        # Field Moves
+
+def get_move(player):
     print("""
-0: Check life points
-1: View hand
-2: View field""")
+####################    ###################   #############################
+##     Player     ##    ##      Hand     ##   ##         Field           ##
+####################    ###################   #############################
+-1: End Turn            1: View hand          5: View field
+0: Check life points    2: See card details   6: See card details
+                        3: Dicard Card        7: Attack with card
+                        4: Play Card          8: Sacrafice a card
+                                              9: Set a card to defence mode
+                                              10: Use effect of card
+                                              11: Activate Magic Card
+                                              12: Discard Card""")
     return input("Make a choice: ")
 
 def declare_winner(players):
@@ -114,19 +133,23 @@ Player 2:
                     board_txt[3]))
 
 def print_hand(player):
-    """Works"""
+    """Prints the title and type of each card in the hand."""
     print("\nPlayer {0}'s hand:".format(player.number))
     for card in player.hand:
         print("{0} ({1})".format(card.title, card.type))
 
+def print_hand_card_details(player):
+    print_hand(player)
+
 def draw_card(player):
-    """Works"""
+    """Adds the top card from the deck to the hand."""
     player.hand.append(player.deck[0])
     print("Player {0} drew a [{1}].".format(player.number,
                                           player.deck[0].title))
     del player.deck[0]
 
 def starting_draw(players):
+    """Makes both players draw 5 cards."""
     print("\nPlayer 1 starting draw.")
     for i in range(5):
         draw_card(players[0])
@@ -136,21 +159,25 @@ def starting_draw(players):
     print
 
 def shuffle_decks(players):
-    """Works"""
+    """Shuffles the deck and returns it."""
     shuffle(players[0].deck)
     shuffle(players[1].deck)
     return players
 
 def coin_toss():
+    """Randomly returns a 0 or 1"""
+    return randint(0,1)
+
+def old_coin_toss():
     """Asks player one to choose a coin.
     Returns 1 if player one is first.
 
     Returns 2 if neither is chosen.
     """
     roll = randint(0,1)
-    
+
     choice = ""
-    
+
     while choice != "heads" and "tails":
         choice = input("Player one: Heads or tails?\nChoice: ").lower()
 
