@@ -8,10 +8,22 @@ except:
 class Card(object):
     def __init__(self, title = "Dark Magician", type = "Monster"):
         self.title = title
+        self.short_title = self.create_short_title(title)
         self.attack = 2500
         self.defence = 2100
         self.type = type
         self.description = "I am a card."
+    def create_short_title(self, title):
+        length = len(title)
+        short_string = ""
+        if length < 12:
+            for i in range(12 - length):
+                short_string += " "
+            return short_string
+        if length == 12:
+            return title
+        if length > 12:
+            return title[:9] + "..."
 
 class Player(object):
     def __init__(self, number = "0"):
@@ -47,6 +59,12 @@ def begin_battle():
 
     declare_winner(players)
 
+def declare_winner(players):
+    winner = 2
+    if(players[0].life_points > 0):
+        winner = 1
+    print("\nPlayer {0} has won!".format(winner))
+
 def battle_loop(players, board):
     i = coin_toss()
     print("Player {0} is first.\n".format(i + 1))
@@ -57,104 +75,9 @@ def battle_loop(players, board):
         print("##Player {0}'s turn.##".format(players[j].number))
         draw_card(players[j])
 
-        choose_move(players, j, board)
+        players[j], board = choose_move(players[j], board)
 
         players[j].life_points = 0
-
-def choose_move(players, j, board):
-    while(1):
-        move  = get_move(players[j])
-
-        # Player moves
-        if move == '-1':
-            break
-        elif move == '0':
-            print("\nYou have {0} "
-                  "life points.".format(players[j].life_points))
-        elif move == '1':
-            print_hand(players[j])
-        # Hand moves
-        elif move == '2':
-            print_hand_card_details(players[j])
-        # Field Moves
-
-def get_move(player):
-    print("""
-####################    ###################   #############################
-##     Player     ##    ##      Hand     ##   ##         Field           ##
-####################    ###################   #############################
--1: End Turn            1: View hand          5: View field
-0: Check life points    2: See card details   6: See card details
-                        3: Discard Card       7: Attack with card
-                        4: Play Card          8: Sacrafice a card
-                                              9: Set a card to defence mode
-                                              10: Use effect of card
-                                              11: Activate Magic Card
-                                              12: Discard Card""")
-    return input("Make a choice: ")
-
-def declare_winner(players):
-    winner = 2
-    if(players[0].life_points > 0):
-        winner = 1
-    print("\nPlayer {0} has won!".format(winner))
-
-
-def place_card_on_board(board_side, hand, hand_pos, position):
-    print("Playing: {0} ({1})".format(hand[hand_pos].title,
-                                     hand[hand_pos].type))
-
-    if hand[hand_pos].type == "Monster":
-        board_side[0][position] = hand[hand_pos]
-        del hand[hand_pos]
-    elif hand[hand_pos].type == "Magic" or "Trap":
-        board_side[1][position] = hand[hand_pos]
-        del hand[hand_pos]
-
-def print_board(board):
-    """Works"""
-    board_txt = ["","","",""]
-
-    for i in range(len(board)):
-        for j in range(len(board[i])):
-            for k in range(len(board[i][j])):
-                if board[i][j][k] == None:
-                    board_txt[(i * 2) + j] += "0\t"
-                else:
-                    board_txt[(i * 2) + j] += "1\t"
-
-    print("""
-Player One:
-Spell: {0}
-Monst: {1}
-
-Monst: {2}
-Spell: {3}
-Player 2:
-""".format(board_txt[1], board_txt[0], board_txt[2],
-                    board_txt[3]))
-
-def print_hand(player):
-    """Prints the title and type of each card in the hand."""
-    print("\nPlayer {0}'s hand:".format(player.number))
-    for index, card in enumerate(player.hand):
-        print("{0}: {1} ({2})".format(index, card.title, card.type))
-
-def print_hand_card_details(player):
-    print_hand(player)
-    card = int(input("Which card do you want the details of?\nCard: "))
-    print
-    print_card_details(player.hand[card])
-
-def print_card_details(card):
-    print("Title: [{0}]".format(card.title))
-    print("Type: [{0}]".format(card.type))
-    print("Description: {0}".format(card.description))
-    if card.type == "Monster":
-        print("Attack: [{0}]".format(card.attack))
-        print("Defence: [{0}]".format(card.defence))
-    else:
-        pass
 
 def draw_card(player):
     """Adds the top card from the deck to the hand."""
@@ -205,6 +128,104 @@ def old_coin_toss():
         return 0
     else:
         return 1
+
+def choose_move(player, board):
+    while(1):
+        move  = get_move()
+
+        # Player moves
+        if move == '-1':
+            break
+        elif move == '0':
+            print("\nYou have {0} "
+                  "life points.".format(player.life_points))
+        elif move == '1':
+            print_hand(player.hand)
+        # Hand moves
+        elif move == '2':
+            print_hand_card_details(player.hand)
+        # Field Moves
+        elif move == '5':
+            print_board(board)
+    return player, board
+
+def get_move():
+    print("""
+####################    ###################   #############################
+##     Player     ##    ##      Hand     ##   ##         Field           ##
+####################    ###################   #############################
+-1: End Turn            1: View hand          5: View field
+0: Check life points    2: See card details   6: See card details
+                        3: Discard Card       7: Attack with card
+                        4: Play Card          8: Sacrafice a card
+                                              9: Set a card to defence mode
+                                              10: Use effect of card
+                                              11: Activate Magic Card
+                                              12: Discard Card""")
+    return input("Make a choice: ")
+
+def print_hand(hand):
+    """Prints the title and type of each card in the hand."""
+    for index, card in enumerate(hand):
+        print("{0}: {1} ({2})".format(index, card.title, card.type))
+
+def print_hand_card_details(hand):
+    print_hand(hand)
+    card = int(input("Which card do you want the details of?\nCard: "))
+    print
+    print_card_details(hand[card])
+
+def print_card_details(card):
+    print("Title: [{0}]".format(card.title))
+    print("Type: [{0}]".format(card.type))
+    print("Description: {0}".format(card.description))
+    if card.type == "Monster":
+        print("Attack: [{0}]".format(card.attack))
+        print("Defence: [{0}]".format(card.defence))
+    else:
+        pass
+
+def print_board(board):
+    """Works"""
+    board_txt = ["","","",""]
+
+    for i, side in enumerate(board):
+        for j, type in enumerate(side):
+            for card in type:
+                if card == None:
+                    board_txt[(i * 2) + j] += "[ Nothing ] "
+                else:
+                    board_txt[(i * 2) + j] += "{0} ".format(
+                                                board[i][j][k].short_title)
+
+    print("""
+Player One:
+Spell: {0}
+Monst: {1}
+
+Monst: {2}
+Spell: {3}
+Player 2:
+""".format(board_txt[1], board_txt[0], board_txt[2],
+                    board_txt[3]))
+
+def place_card_on_board(player_board, card):
+    """Places a card on the first available slot on the board.
+    
+    Be sure to remove the card afterwards."""
+    print("Playing: {0} ({1})".format(card.title, card.type))
+
+    if card.type == "Monster":
+        for slot in player_board[0]:
+            if slot == None:
+                slot = card
+                break
+    elif card.type == "Magic" or "Trap":
+        for slot in player_board[1]:
+            if slot == None:
+                slot = card
+                break
+    return player_board
 
 if __name__ == '__main__':
     begin_battle()
