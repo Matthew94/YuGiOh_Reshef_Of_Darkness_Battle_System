@@ -9,7 +9,9 @@ class Card(object):
     def __init__(self, title = "Dark Magician", type = "Monster"):
         self.title = title
         self.attack = 2500
+        self.defence = 2100
         self.type = type
+        self.description = "I am a card."
 
 class Player(object):
     def __init__(self, number = "0"):
@@ -83,7 +85,7 @@ def get_move(player):
 ####################    ###################   #############################
 -1: End Turn            1: View hand          5: View field
 0: Check life points    2: See card details   6: See card details
-                        3: Dicard Card        7: Attack with card
+                        3: Discard Card       7: Attack with card
                         4: Play Card          8: Sacrafice a card
                                               9: Set a card to defence mode
                                               10: Use effect of card
@@ -135,11 +137,24 @@ Player 2:
 def print_hand(player):
     """Prints the title and type of each card in the hand."""
     print("\nPlayer {0}'s hand:".format(player.number))
-    for card in player.hand:
-        print("{0} ({1})".format(card.title, card.type))
+    for index, card in enumerate(player.hand):
+        print("{0}: {1} ({2})".format(index, card.title, card.type))
 
 def print_hand_card_details(player):
     print_hand(player)
+    card = int(input("Which card do you want the details of?\nCard: "))
+    print
+    print_card_details(player.hand[card])
+
+def print_card_details(card):
+    print("Title: [{0}]".format(card.title))
+    print("Type: [{0}]".format(card.type))
+    print("Description: {0}".format(card.description))
+    if card.type == "Monster":
+        print("Attack: [{0}]".format(card.attack))
+        print("Defence: [{0}]".format(card.defence))
+    else:
+        pass
 
 def draw_card(player):
     """Adds the top card from the deck to the hand."""
