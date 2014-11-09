@@ -75,7 +75,7 @@ def battle_loop(players, board):
         print("##Player {0}'s turn.##".format(players[j].number))
         draw_card(players[j])
 
-        players[j], board = choose_move(players[j], board)
+        players[j], board = player_move(players[j], board)
 
         players[j].life_points = 0
 
@@ -106,50 +106,56 @@ def coin_toss():
     """Randomly returns a 0 or 1"""
     return randint(0,1)
 
-def old_coin_toss():
-    """Asks player one to choose a coin.
-    Returns 1 if player one is first.
-
-    Returns 2 if neither is chosen.
-    """
-    roll = randint(0,1)
-
-    choice = ""
-
-    while choice != "heads" and "tails":
-        choice = input("Player one: Heads or tails?\nChoice: ").lower()
-
-    if choice == 'heads':
-        choice = 1
-    elif choice == 'tails':
-        choice = 0
-
-    if choice == roll:
-        return 0
-    else:
-        return 1
-
-def choose_move(player, board):
+def player_move(player, board):
     while(1):
-        move  = get_move()
+        move  = get_player_move()
 
         # Player moves
+        # End turn
         if move == '-1':
             break
+        # Print lift points
         elif move == '0':
             print("\nYou have {0} "
                   "life points.".format(player.life_points))
+        
+        # Hand moves
+        # Print hand
         elif move == '1':
             print_hand(player.hand)
-        # Hand moves
+        # See card details
         elif move == '2':
             print_hand_card_details(player.hand)
+        # Discard card from hand
+        elif move == '3':
+            print_hand(player.hand)
+            choice = int(input("Delete card: "))
+            if choice == -1:
+                continue
+            del player.hand[choice]
+        elif move == '4':
+            pass
+        
         # Field Moves
         elif move == '5':
             print_board(board)
+        elif move == '6':
+            pass
+        elif move == '7':
+            pass
+        elif move == '8':
+            pass
+        elif move == '9':
+            pass
+        elif move == '10':
+            pass
+        elif move == '11':
+            pass
+        elif move == '12':
+            pass
     return player, board
 
-def get_move():
+def get_player_move():
     print("""
 ####################    ###################   #############################
 ##     Player     ##    ##      Hand     ##   ##         Field           ##
