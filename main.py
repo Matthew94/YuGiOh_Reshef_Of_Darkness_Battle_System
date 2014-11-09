@@ -13,17 +13,33 @@ class Card(object):
         self.defence = 2100
         self.type = type
         self.description = "I am a card."
+        
     def create_short_title(self, title):
         length = len(title)
-        short_string = ""
-        if length < 12:
-            for i in range(12 - length):
-                short_string += " "
-            return short_string
-        if length == 12:
-            return title
-        if length > 12:
-            return title[:9] + "..."
+        # If it's a long title, shorten it
+        if length >= 10:
+            return "[{0}]".format(title[0:10])
+        # If it's short, add whitespace
+        else:
+            start = "["
+            end = ""
+            # Work out how much whitespace is needed
+            white_space = 10 - length
+            white_iter = int(white_space / 2)
+            # If it's an even amount, add the same to each side
+            if white_space % 2 == 0:
+                for i in range(white_iter):
+                    start += " "
+                    end += " "
+                end += "]"
+                return start + title + end
+            # Else have one more blank char to the left
+            else:
+                for i in range(white_iter):
+                    start += " "
+                    end += " "
+                end += " ]"
+                return start + title + end
 
 class Player(object):
     def __init__(self, number = "0"):
@@ -46,7 +62,7 @@ def begin_battle():
     print("It's time to Duh-Duh-Duh-Duh-D-D-D-D-D-D-D-D-Duelllllll!!!!!!")
 
     # Setting up players
-    players = [Player("1"),Player("2")]
+    players = [Player(0),Player(1)]
     players = shuffle_decks(players)
 
     # Setting up board
@@ -72,7 +88,7 @@ def battle_loop(players, board):
     while(players[0].life_points > 0 and players[1].life_points > 0):
         j = i % 2
 
-        print("##Player {0}'s turn.##".format(players[j].number))
+        print("##Player {0}'s turn.##".format(players[j].number + 1))
         draw_card(players[j])
 
         players[j], board = player_move(players[j], board)
@@ -82,7 +98,7 @@ def battle_loop(players, board):
 def draw_card(player):
     """Adds the top card from the deck to the hand."""
     player.hand.append(player.deck[0])
-    print("Player {0} drew a [{1}].".format(player.number,
+    print("Player {0} drew a [{1}].".format(player.number + 1,
                                           player.deck[0].title))
     del player.deck[0]
 
@@ -107,6 +123,8 @@ def coin_toss():
     return randint(0,1)
 
 def player_move(player, board):
+    normal_summoned = False
+
     while(1):
         move  = get_player_move()
 
@@ -133,24 +151,36 @@ def player_move(player, board):
             if choice == -1:
                 continue
             del player.hand[choice]
+        # Play card to field
         elif move == '4':
-            pass
+            print_hand(player.hand)
+            choice = int(input("Play card: "))
+            board[player.number] = place_card_on_board(board[player.number],
+                                                       player.hand[choice])
         
         # Field Moves
+        # View the field
         elif move == '5':
             print_board(board)
+        # See card details
         elif move == '6':
             pass
+        # Attack with a card
         elif move == '7':
             pass
+        # Sacrafice a card
         elif move == '8':
             pass
+        # Set card to defence mode
         elif move == '9':
             pass
+        # Use card effect
         elif move == '10':
             pass
+        # Activate a magic card
         elif move == '11':
             pass
+        # Discard a card
         elif move == '12':
             pass
     return player, board
@@ -199,10 +229,9 @@ def print_board(board):
         for j, type in enumerate(side):
             for card in type:
                 if card == None:
-                    board_txt[(i * 2) + j] += "[ Nothing ] "
+                    board_txt[(i * 2) + j] += "[ Nil card ] "
                 else:
-                    board_txt[(i * 2) + j] += "{0} ".format(
-                                                board[i][j][k].short_title)
+                    board_txt[(i * 2) + j] += "{0} ".format(card.short_title)
 
     print("""
 Player One:
@@ -222,14 +251,14 @@ def place_card_on_board(player_board, card):
     print("Playing: {0} ({1})".format(card.title, card.type))
 
     if card.type == "Monster":
-        for slot in player_board[0]:
-            if slot == None:
-                slot = card
+        for i in range(len(player_board[1])):
+            if player_board[0][i] == None:
+                player_board[0][i] = card
                 break
     elif card.type == "Magic" or "Trap":
-        for slot in player_board[1]:
-            if slot == None:
-                slot = card
+        for i in range(len(player_board[1])):
+            if player_board[1][i] == None:
+                player_board[1][i] = card
                 break
     return player_board
 
