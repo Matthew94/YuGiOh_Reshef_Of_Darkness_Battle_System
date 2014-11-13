@@ -5,7 +5,7 @@ def BattleClass(object):
                       "Thunder":"Water",
                       "Water":"Fire",
                       "Fire":"Forest",
-                      "Forest":"Wind":
+                      "Forest":"Wind",
                       "Shadow":"Light",
                       "Light":"Fiend",
                       "Fiend":"Dream",

@@ -155,8 +155,10 @@ def player_move(player, board):
         elif move == '4':
             print_hand(player.hand)
             choice = int(input("Play card: "))
+
             board[player.number], was_played = place_card_on_board(
                 board[player.number], player.hand[choice])
+
             if was_played == True:
                 del player.hand[choice]
         
@@ -252,22 +254,15 @@ def place_card_on_board(player_board, card):
     Be sure to remove the card afterwards."""
     print("Playing: {0} ({1})".format(card.title, card.type))
 
-    if card.type == "Monster":
-        for i in range(len(player_board[0])):
-            if player_board[0][i] == None:
-                player_board[0][i] = card
-                break
-            if player_board[0][4] != None:
-                print("\nNo spare slots\n")
-                return player_board, False
-    elif card.type == "Magic" or "Trap":
-        for i in range(len(player_board[1])):
-            if player_board[1][i] == None:
-                player_board[1][i] = card
-                break
-            if player_board[1][4] != None:
-                print("\nNo spare slots\n")
-                return player_board, False
+    board_side = 0 if card.type == "Monster" else 1
+        
+    for i in range(len(player_board[board_side])):
+        if player_board[board_side][i] == None:
+            player_board[board_side][i] = card
+            break
+        if player_board[board_side][4] != None:
+            print("\nNo spare slots\n")
+            return player_board, False
     return player_board, True
 
 if __name__ == '__main__':
