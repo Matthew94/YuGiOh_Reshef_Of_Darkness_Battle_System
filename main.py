@@ -121,10 +121,17 @@ def battle_loop(players, board):
     while(players[0].life_points > 0 and players[1].life_points > 0):
         j = i % 2
 
-        print("##Player {0}'s turn.##".format(players[j].number + 1))
+        print("\n##Player {0}'s turn.##".format(players[j].number + 1))
         draw_card(players[j])
 
         players[j], board = do_player_move(players[j], board)
+
+        # Check if the player has too many cards
+        if len(players[j].hand) > 5:
+            print_hand(players[j].hand)
+            discard = int(input("You have too many cards.\nChoose one to discard: "))
+            print("Discarding {0}...".format(players[j].hand[discard].title))
+            del players[j].hand[discard]
 
         # Move counter to next turn
         i += 1
