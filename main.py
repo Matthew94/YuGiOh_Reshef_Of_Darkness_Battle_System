@@ -91,9 +91,7 @@ def battle_loop(players, board):
         print("##Player {0}'s turn.##".format(players[j].number + 1))
         draw_card(players[j])
 
-        players[j], board = player_move(players[j], board)
-
-        players[j].life_points = 0
+        players[j], board = do_player_move(players[j], board)
 
 def draw_card(player):
     """Adds the top card from the deck to the hand."""
@@ -122,13 +120,17 @@ def coin_toss():
     """Randomly returns a 0 or 1"""
     return randint(0,1)
 
-def player_move(player, board):
+def do_player_move(player, board):
     normal_summoned = False
 
     while(1):
-        move  = get_player_move()
+        move  = print_and_get_player_move()
 
         # Player moves
+        # Surrender
+        if move == "-2":
+            player.life_points = 0
+            break
         # End turn
         if move == '-1':
             break
@@ -192,14 +194,14 @@ def player_move(player, board):
             pass
     return player, board
 
-def get_player_move():
+def print_and_get_player_move():
     print("""
 ####################    ###################   #############################
 ##     Player     ##    ##      Hand     ##   ##         Field           ##
 ####################    ###################   #############################
--1: End Turn            1: View hand          5: View field
-0: Check life points    2: See card details   6: See card details
-                        3: Discard Card       7: Attack with card
+-2: Surrender           1: View hand          5: View field
+-1: End Turn            2: See card details   6: See card details
+0:  Check life points   3: Discard Card       7: Attack with card
                         4: Play Card          8: Sacrafice a card
                                               9: Set a card to defence mode
                                               10: Use effect of card
