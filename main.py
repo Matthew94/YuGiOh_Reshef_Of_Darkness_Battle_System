@@ -126,7 +126,7 @@ def battle_loop(players, board):
 
         players[j], board = do_player_move(players[j], board)
 
-        # Check if the player has too many cards
+        # Check if the player has too many cards, discard one if over 5
         if len(players[j].hand) > 5:
             print_hand(players[j].hand)
             discard = int(input("You have too many cards.\nChoose one to discard: "))
