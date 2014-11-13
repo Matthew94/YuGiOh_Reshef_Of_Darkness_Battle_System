@@ -7,6 +7,10 @@ except:
 
 class Card(object):
     def __init__(self, title = "Dark Magician", type = "Monster"):
+        """Basically a c style struct.
+
+        Contains the attributes of the card.
+        """
         self.title = title
         self.short_title = self.create_short_title(title)
         self.attack = 2500
@@ -15,6 +19,7 @@ class Card(object):
         self.description = "I am a card."
         
     def create_short_title(self, title):
+        """Creates a shortened title for displaying on the board."""
         length = len(title)
         # If it's a long title, shorten it
         if length >= 10:
@@ -43,6 +48,14 @@ class Card(object):
 
 class Player(object):
     def __init__(self, number = "0"):
+        """Object representing a player.
+
+        Has life points, a deck and a hand.
+
+        self.number is to make it easy to access it from a list.
+        It would typically be 0 or 1.
+        """
+
         self.number = number
         self.life_points = 8000
         self.hand = []
@@ -76,12 +89,32 @@ def begin_battle():
     declare_winner(players)
 
 def declare_winner(players):
-    winner = 2
-    if(players[0].life_points > 0):
-        winner = 1
-    print("\nPlayer {0} has won!".format(winner))
+    """Checks life points of each player and prints the winner.
+    
+    Checks for a draw first then decides the winner.
+    """
+
+    if players[0].life_points == players[1].life_points == 0:
+        print("It's a draw!")
+    else:
+        winner = 2
+        if(players[0].life_points > 0):
+            winner = 1
+        print("\nPlayer {0} has won!".format(winner))
 
 def battle_loop(players, board):
+    """Main loop of battle.
+
+    i is an int that can start at 0 or 1 and decides who goes first.
+    It's incremented each turn.
+
+    j is i % 2 so it ensures that you can still access the players
+    from the lists even after i becomes greater than 1.
+
+    The players draw a card and take their turns until one of them
+    hits 0 life points.
+    """
+
     i = coin_toss()
     print("Player {0} is first.\n".format(i + 1))
 
@@ -93,8 +126,12 @@ def battle_loop(players, board):
 
         players[j], board = do_player_move(players[j], board)
 
+        # Move counter to next turn
+        i += 1
+
 def draw_card(player):
     """Adds the top card from the deck to the hand."""
+
     player.hand.append(player.deck[0])
     print("Player {0} drew a [{1}].".format(player.number + 1,
                                           player.deck[0].title))
@@ -102,6 +139,7 @@ def draw_card(player):
 
 def starting_draw(players):
     """Makes both players draw 5 cards."""
+
     print("\nPlayer 1 starting draw.")
     for i in range(5):
         draw_card(players[0])
@@ -121,6 +159,12 @@ def coin_toss():
     return randint(0,1)
 
 def do_player_move(player, board):
+    """Displays all possible moves then gets the players input.
+
+    Calls the relevant function depending on the choice.
+
+    Function ends when the player ends their turn.
+    """
     normal_summoned = False
 
     while(1):
@@ -195,6 +239,8 @@ def do_player_move(player, board):
     return player, board
 
 def print_and_get_player_move():
+    """Prints all possibel moves and asks for the player's choice."""
+
     print("""
 ####################    ###################   #############################
 ##     Player     ##    ##      Hand     ##   ##         Field           ##
@@ -215,12 +261,15 @@ def print_hand(hand):
         print("{0}: {1} ({2})".format(index, card.title, card.type))
 
 def print_hand_card_details(hand):
+    """Asks player which card they want a detailed description of."""
     print_hand(hand)
     card = int(input("Which card do you want the details of?\nCard: "))
     print
     print_card_details(hand[card])
 
 def print_card_details(card):
+    """Prints all attributes of a card."""
+
     print("Title: [{0}]".format(card.title))
     print("Type: [{0}]".format(card.type))
     print("Description: {0}".format(card.description))
@@ -231,7 +280,7 @@ def print_card_details(card):
         pass
 
 def print_board(board):
-    """Works"""
+    """Prints an ascii representation of a board along with all cards."""
     board_txt = ["","","",""]
 
     for i, side in enumerate(board):
