@@ -155,8 +155,10 @@ def player_move(player, board):
         elif move == '4':
             print_hand(player.hand)
             choice = int(input("Play card: "))
-            board[player.number] = place_card_on_board(board[player.number],
-                                                       player.hand[choice])
+            board[player.number], was_played = place_card_on_board(
+                board[player.number], player.hand[choice])
+            if was_played == True:
+                del player.hand[choice]
         
         # Field Moves
         # View the field
@@ -251,16 +253,22 @@ def place_card_on_board(player_board, card):
     print("Playing: {0} ({1})".format(card.title, card.type))
 
     if card.type == "Monster":
-        for i in range(len(player_board[1])):
+        for i in range(len(player_board[0])):
             if player_board[0][i] == None:
                 player_board[0][i] = card
                 break
+            if player_board[0][4] != None:
+                print("\nNo spare slots\n")
+                return player_board, False
     elif card.type == "Magic" or "Trap":
         for i in range(len(player_board[1])):
             if player_board[1][i] == None:
                 player_board[1][i] = card
                 break
-    return player_board
+            if player_board[1][4] != None:
+                print("\nNo spare slots\n")
+                return player_board, False
+    return player_board, True
 
 if __name__ == '__main__':
     begin_battle()
