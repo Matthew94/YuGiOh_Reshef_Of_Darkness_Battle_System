@@ -157,9 +157,12 @@ def player_move(player, board):
             choice = int(input("Play card: "))
 
             board[player.number], was_played = place_card_on_board(
-                board[player.number], player.hand[choice])
+                board[player.number], player.hand[choice],
+                normal_summoned)
 
             if was_played == True:
+                if player.hand[choice].type == "Monster":
+                    normal_summoned = True
                 del player.hand[choice]
         
         # Field Moves
@@ -248,14 +251,18 @@ Player 2:
 """.format(board_txt[1], board_txt[0], board_txt[2],
                     board_txt[3]))
 
-def place_card_on_board(player_board, card):
+def place_card_on_board(player_board, card, normal_summoned):
     """Places a card on the first available slot on the board.
     
     Be sure to remove the card afterwards."""
     print("Playing: {0} ({1})".format(card.title, card.type))
 
     board_side = 0 if card.type == "Monster" else 1
-        
+    
+    if normal_summoned == True and board_side == 0:
+        print("You have already played a monster card.\n")
+        return player_board, False
+
     for i in range(len(player_board[board_side])):
         if player_board[board_side][i] == None:
             player_board[board_side][i] = card
