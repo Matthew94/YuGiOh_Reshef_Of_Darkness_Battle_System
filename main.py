@@ -78,7 +78,7 @@ def main():
     players = [Player(0),Player(1)]
     players = shuffle_decks(players)
 
-    # Setting up board
+    # Setting up board: Player 0 Monsters/Magic - Player 1 Monsters/Spells
     board = [[[None] * 5, [None] * 5], [[None] * 5, [None] * 5]]
 
     starting_draw(players)
@@ -244,7 +244,7 @@ def do_player_move(player, board):
             pass
         # Sacrafice a card
         elif move == '8':
-            pass
+            print_player_monsters(board[player.number][0])
         # Set card to defence mode
         elif move == '9':
             pass
@@ -362,6 +362,24 @@ Spell: {2}
 {3}
 """.format(top_row, board_txt[0], board_txt[1], bottom_row))
 
+def print_player_monsters(player_monster_board):
+    board_txt = ""
+
+    row_numbers = ""
+    for i in range(5):
+        row_numbers += (" " * 12) + str(i)
+
+    for card in player_monster_board:
+        if card == None:
+            board_txt += "[ Nil card ] "
+        else:
+            board_txt += "{0} ".format(card.short_title)
+
+    print("""
+{0}
+Monst: {1}
+""".format(row_numbers, board_txt))
+
 def place_card_on_board(player_board, card, normal_summoned):
     """Places a card on the first available slot on the board.
     
@@ -371,7 +389,7 @@ def place_card_on_board(player_board, card, normal_summoned):
     board_side = 0 if card.type == "Monster" else 1
     
     if normal_summoned == True and board_side == 0:
-        print("You have already played a monster card.\n")
+        print("You have already played a monster card.")
         return player_board, False
 
     for i in range(len(player_board[board_side])):
@@ -379,7 +397,7 @@ def place_card_on_board(player_board, card, normal_summoned):
             player_board[board_side][i] = card
             break
         if player_board[board_side][4] != None:
-            print("\nNo spare slots\n")
+            print("No spare slots for that card.")
             return player_board, False
     return player_board, True
 
