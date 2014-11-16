@@ -7,10 +7,7 @@ except:
 
 class Card(object):
     def __init__(self, title = "Dark Magician", type = "Monster"):
-        """Basically a c style struct.
-
-        Contains the attributes of the card.
-        """
+        """Contains the attributes of the card."""
         self.title = title
         self.short_title = self.create_short_title(title)
         self.attack = 2500
@@ -173,7 +170,7 @@ def do_player_move(player, board):
     Function ends when the player ends their turn.
     """
     normal_summoned = False
-    sacrafices = 0
+    sacrifices = 0
 
     while(1):
         move  = print_and_get_player_move()
@@ -242,9 +239,18 @@ def do_player_move(player, board):
         # Attack with a card
         elif move == '7':
             pass
-        # Sacrafice a card
+        # sacrifice a card
         elif move == '8':
             print_player_monsters(board[player.number][0])
+            choice = int(input("(-1 to quit) Choose a card to sacrifice: "))
+
+            if board[player.number][0][choice] is not None:
+                print("Sacrificing {0}...".format(board[player.number][0][choice].title))
+                board[player.number][0][choice] = None
+                sacrifices += 1
+            else:
+                print("There is no card there...")
+
         # Set card to defence mode
         elif move == '9':
             pass
@@ -284,7 +290,7 @@ def print_and_get_player_move():
 -2: Surrender           1: View hand          5: View field
 -1: End Turn            2: See card details   6: See card details
 0:  Check life points   3: Discard Card       7: Attack with card
-                        4: Play Card          8: Sacrafice a card
+                        4: Play Card          8: Sacrifice a card
                                               9: Set a card to defence mode
                                               10: Use effect of card
                                               11: Activate Magic Card
