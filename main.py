@@ -243,7 +243,10 @@ def do_player_move(player, board):
         # sacrifice a card
         elif move == '8':
             print_player_monsters(board[player.number][0])
-            choice = int(input("(-1 to quit) Choose a card to sacrifice: "))
+            choice = int(input("(-1 to quit)\nChoose a card to sacrifice: "))
+
+            if choice == -1:
+                continue
 
             if board[player.number][0][choice] is not None:
                 print("Sacrificing {0}...".format(board[player.number][0][choice].title))
@@ -254,7 +257,19 @@ def do_player_move(player, board):
 
         # Set card to defence mode
         elif move == '9':
-            pass
+            print_player_monsters(board[player.number][0])
+            choice = int(input("(-1 to quit)\nChoose a card to put into defence mode: "))
+
+            if choice == -1:
+                continue
+
+            if board[player.number][0][choice] is not None:
+                board[player.number][0][choice].defence_mode = True
+                print("Putting {0} to defence mode...".format(
+                    board[player.number][0][choice].title))
+            else:
+                print("There is no card there...")
+
         # Use card effect
         elif move == '10':
             pass
@@ -319,8 +334,11 @@ def print_card_details(card):
     if card.type == "Monster":
         print("Attack: [{0}]".format(card.attack))
         print("Defence: [{0}]".format(card.defence))
-    else:
-        pass
+        
+        mode = "Attack Mode"
+        if card.defence_mode:
+            mode = "Defence Mode"
+        print("Mode: {0}".format(mode))
 
 def print_board(board):
     """Prints an ascii representation of a board along with all cards."""
