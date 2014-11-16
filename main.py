@@ -228,6 +228,17 @@ def do_player_move(player, board):
 
             choice = int(input("Choose a card: "))
 
+            # If it's a magic/trap card set list index to 1
+            if choice > 4:
+                choice -= 5
+                side = 1
+            else:
+                side = 0
+
+            if board[player.number][side][choice] != None:
+                print_card_details(board[player.number][side][choice])
+            else:
+                print("There is no card in that slot.")
         # Attack with a card
         elif move == '7':
             pass
@@ -331,8 +342,8 @@ def print_player_board(player_board):
 
     print("""
 {0}
-Spell: {1}
-Monst: {2}
+Monst: {1}
+Spell: {2}
 {3}
 """.format(top_row, board_txt[0], board_txt[1], bottom_row))
 
