@@ -173,6 +173,7 @@ def do_player_move(player, board):
     Function ends when the player ends their turn.
     """
     normal_summoned = False
+    sacrafices = 0
 
     while(1):
         move  = print_and_get_player_move()
@@ -200,7 +201,7 @@ def do_player_move(player, board):
         # Discard card from hand
         elif move == '3':
             print_hand(player.hand)
-            choice = int(input("Delete card: "))
+            choice = int(input("(-1 to cancel) Delete card: "))
             if choice == -1:
                 continue
             del player.hand[choice]
@@ -225,7 +226,6 @@ def do_player_move(player, board):
         # See card details
         elif move == '6':
             print_player_board(board[player.number])
-
             choice = int(input("Choose a card: "))
 
             # If it's a magic/trap card set list index to 1
@@ -256,7 +256,22 @@ def do_player_move(player, board):
             pass
         # Discard a card
         elif move == '12':
-            pass
+            print_player_board(board[player.number])
+
+            choice = int(input("(-1 to cancel) Delete card: "))
+            if choice == -1:
+                continue
+
+            # If it's a magic/trap card set list index to 1
+            if choice > 4:
+                choice -= 5
+                side = 1
+            else:
+                side = 0
+
+            board[player.number][side][choice] = None
+
+
     return player, board
 
 def print_and_get_player_move():
