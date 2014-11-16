@@ -66,7 +66,7 @@ class Player(object):
                      Card("Cor-ner"), Card("Oven","Magic"), Card("Microwave"),
                      Card("Earl","Trap"), Card("lel"), Card("Kek","Magic")]
 
-def begin_battle():
+def main():
     """Program to simulate a battle from Yu-Gi-Oh: Reshef of Destruction.
 
     players: list of two player objects
@@ -224,7 +224,10 @@ def do_player_move(player, board):
             print_board(board)
         # See card details
         elif move == '6':
-            pass
+            print_player_board(board[player.number])
+
+            choice = int(input("Choose a card: "))
+
         # Attack with a card
         elif move == '7':
             pass
@@ -309,6 +312,30 @@ Player 2:
 """.format(board_txt[1], board_txt[0], board_txt[2],
                     board_txt[3]))
 
+def print_player_board(player_board):
+    board_txt = ["", ""]
+    
+    # Generating numbers for user to choose a card
+    top_row = bottom_row = ""
+    for i in range(5):
+        top_row += (" " * 12) + str(i)
+        bottom_row += (" " * 12) + str(i + 5)
+    
+
+    for j, type in enumerate(player_board):
+        for card in type:
+            if card == None:
+                board_txt[j] += "[ Nil card ] "
+            else:
+                board_txt[j] += "{0} ".format(card.short_title)
+
+    print("""
+{0}
+Spell: {1}
+Monst: {2}
+{3}
+""".format(top_row, board_txt[0], board_txt[1], bottom_row))
+
 def place_card_on_board(player_board, card, normal_summoned):
     """Places a card on the first available slot on the board.
     
@@ -331,4 +358,4 @@ def place_card_on_board(player_board, card, normal_summoned):
     return player_board, True
 
 if __name__ == '__main__':
-    begin_battle()
+    main()
