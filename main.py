@@ -14,7 +14,8 @@ class Card(object):
         self.defence = 2100
         self.type = type
         self.description = "I am a card."
-        
+        self.defence_mode = False
+
     def create_short_title(self, title):
         """Creates a shortened title for displaying on the board."""
         length = len(title)
