@@ -15,6 +15,7 @@ class Card(object):
         self.type = type
         self.description = "I am a card."
         self.defence_mode = False
+        self.face_down = True
 
     def create_short_title(self, title):
         """Creates a shortened title for displaying on the board."""
@@ -130,6 +131,9 @@ def battle_loop(players, board):
             discard = int(input("You have too many cards.\nChoose one to discard: "))
             print("Discarding {0}...".format(players[j].hand[discard].title))
             del players[j].hand[discard]
+
+        # TODO: Set all attack mode cards to face up
+        
 
         # Move counter to next turn
         i += 1
