@@ -1,3 +1,5 @@
+from random import shuffle
+
 def shuffle_decks(players):
     """Shuffles the deck and returns it."""
     shuffle(players[0].deck)

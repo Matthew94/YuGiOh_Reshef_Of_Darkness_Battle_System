@@ -1,9 +1,13 @@
 from __future__ import print_function
 
-from random import randint, shuffle
 from card_class import Card
 from player_class import Player
-from misc_functions import print_intro_text, shuffle_decks, coin_toss
+
+from misc_functions import (coin_toss, declare_winner, print_card_details, print_intro_text,
+                           discard_excess_from_hand)
+from print_board_functions import print_board, print_player_board, print_player_monsters
+from player_functions import (place_card_on_board, print_and_get_player_move, print_hand, 
+                              print_hand_card_details, shuffle_decks)
 
 try:
     input = raw_input
@@ -27,24 +31,11 @@ def main():
 
     starting_draw(players)
 
-    print("\nBattle starting.")
     battle_loop(players, board)
 
     declare_winner(players)
 
-def declare_winner(players):
-    """Checks life points of each player and prints the winner.
-    
-    Checks for a draw first then decides the winner.
-    """
 
-    if players[0].life_points == players[1].life_points == 0:
-        print("It's a draw!")
-    else:
-        winner = 2
-        if(players[0].life_points > 0):
-            winner = 1
-        print("\nPlayer {0} has won!".format(winner))
 
 def battle_loop(players, board):
     """Main loop of battle.
@@ -58,30 +49,25 @@ def battle_loop(players, board):
     The players draw a card and take their turns until one of them
     hits 0 life points.
     """
+    print("\nBattle starting.")
 
     i = coin_toss()
     print("Player {0} is first.\n".format(i + 1))
 
     while(players[0].life_points > 0 and players[1].life_points > 0):
-        j = i % 2
+        print("\n##Player {0}'s turn.##".format(players[i].number + 1))
+        draw_card(players[i])
 
-        print("\n##Player {0}'s turn.##".format(players[j].number + 1))
-        draw_card(players[j])
-
-        players[j], board = do_player_move(players[j], board)
+        players[i], board = do_player_move(players[i], board)
 
         # Check if the player has too many cards, discard one if over 5
-        if len(players[j].hand) > 5:
-            print_hand(players[j].hand)
-            discard = int(input("You have too many cards.\nChoose one to discard: "))
-            print("Discarding {0}...".format(players[j].hand[discard].title))
-            del players[j].hand[discard]
+        players[i].hand = discard_excess_from_hand(players[i].hand)
 
         # TODO: Set all attack mode cards to face up
         
 
         # Move counter to next turn
-        i += 1
+        i ^= 1
 
 def draw_card(player):
     """Adds the top card from the deck to the hand."""
