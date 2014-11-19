@@ -354,7 +354,10 @@ def print_board(board):
                 if card == None:
                     board_txt[(i * 2) + j] += "[ Nil card ] "
                 else:
-                    board_txt[(i * 2) + j] += "{0} ".format(card.short_title)
+                    if card.face_down:
+                         board_txt[(i * 2) + j] += "[ Facedown ] "
+                    else:
+                        board_txt[(i * 2) + j] += "{0} ".format(card.short_title)
 
     print("""
 Player One:
