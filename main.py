@@ -1,69 +1,11 @@
 from random import randint, shuffle
+from card_class import Card
+from player_class import Player
 
 try:
     input = raw_input
 except:
     pass
-
-class Card(object):
-    def __init__(self, title = "Dark Magician", type = "Monster"):
-        """Contains the attributes of the card."""
-        self.title = title
-        self.short_title = self.create_short_title(title)
-        self.attack = 2500
-        self.defence = 2100
-        self.type = type
-        self.description = "I am a card."
-        self.defence_mode = False
-        self.face_down = True
-
-    def create_short_title(self, title):
-        """Creates a shortened title for displaying on the board."""
-        length = len(title)
-        # If it's a long title, shorten it
-        if length >= 10:
-            return "[{0}]".format(title[0:10])
-        # If it's short, add whitespace
-        else:
-            start = "["
-            end = ""
-            # Work out how much whitespace is needed
-            white_space = 10 - length
-            white_iter = int(white_space / 2)
-            # If it's an even amount, add the same to each side
-            if white_space % 2 == 0:
-                for i in range(white_iter):
-                    start += " "
-                    end += " "
-                end += "]"
-                return start + title + end
-            # Else have one more blank char to the left
-            else:
-                for i in range(white_iter):
-                    start += " "
-                    end += " "
-                end += " ]"
-                return start + title + end
-
-class Player(object):
-    def __init__(self, number = "0"):
-        """Object representing a player.
-
-        Has life points, a deck and a hand.
-
-        self.number is to make it easy to access it from a list.
-        It would typically be 0 or 1.
-        """
-
-        self.number = number
-        self.life_points = 8000
-        self.hand = []
-        self.deck = [Card("Jim","Magic"), Card("Tom","Trap"), Card("Harry"),
-                     Card("Bob","Trap"), Card("Ollie","Magic"), Card("Jimmy"),
-                     Card("Sam"), Card("pop","Magic"), Card("Matthew","Trap"),
-                     Card("Corner"), Card("Ross"), Card("Datasheet"),
-                     Card("Cor-ner"), Card("Oven","Magic"), Card("Microwave"),
-                     Card("Earl","Trap"), Card("lel"), Card("Kek","Magic")]
 
 def main():
     """Program to simulate a battle from Yu-Gi-Oh: Reshef of Destruction.
@@ -74,7 +16,7 @@ def main():
     print("It's time to Duh-Duh-Duh-Duh-D-D-D-D-D-D-D-D-Duelllllll!!!!!!")
 
     # Setting up players
-    players = [Player(0),Player(1)]
+    players = [Player(0), Player(1)]
     players = shuffle_decks(players)
 
     # Setting up board: Player 0 Monsters/Magic - Player 1 Monsters/Spells
@@ -225,8 +167,13 @@ def do_player_move(player, board):
         # View the field
         elif move == '5':
             print_board(board)
-        # See card details
+
+        # View your own field
         elif move == '6':
+            print_player_board(board[player.number])
+
+        # See card details
+        elif move == '7':
             print_player_board(board[player.number])
             choice = int(input("Choose a card: "))
 
@@ -242,10 +189,10 @@ def do_player_move(player, board):
             else:
                 print("There is no card in that slot.")
         # Attack with a card
-        elif move == '7':
+        elif move == '8':
             pass
         # sacrifice a card
-        elif move == '8':
+        elif move == '9':
             print_player_monsters(board[player.number][0])
             choice = int(input("(-1 to quit)\nChoose a card to sacrifice: "))
 
@@ -260,7 +207,7 @@ def do_player_move(player, board):
                 print("There is no card there...")
 
         # Set card to defence mode
-        elif move == '9':
+        elif move == '10':
             print_player_monsters(board[player.number][0])
             choice = int(input("(-1 to quit)\nChoose a card to put into defence mode: "))
 
@@ -275,13 +222,13 @@ def do_player_move(player, board):
                 print("There is no card there...")
 
         # Use card effect
-        elif move == '10':
-            pass
-        # Activate a magic card
         elif move == '11':
             pass
-        # Discard a card
+        # Activate a magic card
         elif move == '12':
+            pass
+        # Discard a card
+        elif move == '13':
             print_player_board(board[player.number])
 
             choice = int(input("(-1 to cancel) Delete card: "))
@@ -307,14 +254,15 @@ def print_and_get_player_move():
 ####################    ###################   #############################
 ##     Player     ##    ##      Hand     ##   ##         Field           ##
 ####################    ###################   #############################
--2: Surrender           1: View hand          5: View field
--1: End Turn            2: See card details   6: See card details
-0:  Check life points   3: Discard Card       7: Attack with card
-                        4: Play Card          8: Sacrifice a card
-                                              9: Set a card to defence mode
-                                              10: Use effect of card
-                                              11: Activate Magic Card
-                                              12: Discard Card""")
+-2: Surrender           1: View hand          5: View full field
+-1: End Turn            2: See card details   6: View your own field
+0:  Check life points   3: Discard Card       7: See card details
+                        4: Play Card          8: Attack with card
+                                              9: Sacrifice a card
+                                              10: Set a card to defence mode
+                                              11: Use effect of card
+                                              12: Activate Magic Card
+                                              13: Discard Card""")
     return input("Make a choice: ")
 
 def print_hand(hand):
