@@ -4,7 +4,7 @@ from card_class import Card
 from player_class import Player
 
 from misc_functions import (coin_toss, declare_winner, print_card_details, print_intro_text,
-                           discard_excess_from_hand)
+                           discard_excess_from_hand, starting_draw, draw_card)
 from print_board_functions import print_board, print_player_board, print_player_monsters
 from player_functions import (place_card_on_board, print_and_get_player_move, print_hand, 
                               print_hand_card_details, shuffle_decks)
@@ -52,43 +52,30 @@ def battle_loop(players, board):
     print("\nBattle starting.")
 
     i = coin_toss()
-    print("Player {0} is first.\n".format(i + 1))
 
-    while(players[0].life_points > 0 and players[1].life_points > 0):
+    while True:
         print("\n##Player {0}'s turn.##".format(players[i].number + 1))
+        
         draw_card(players[i])
 
-        players[i], board = do_player_move(players[i], board)
+        players[i], board = do_player_move(players[i], players[i^1], board)
+
+        # Check to see if anyone is at 0 life points
+        if not players[0].life_points or not players[1].life_points:
+            break
 
         # Check if the player has too many cards, discard one if over 5
         players[i].hand = discard_excess_from_hand(players[i].hand)
 
         # TODO: Set all attack mode cards to face up
         
-
         # Move counter to next turn
         i ^= 1
 
-def draw_card(player):
-    """Adds the top card from the deck to the hand."""
 
-    player.hand.append(player.deck[0])
-    print("Player {0} drew a [{1}].".format(player.number + 1,
-                                          player.deck[0].title))
-    del player.deck[0]
 
-def starting_draw(players):
-    """Makes both players draw 5 cards."""
-
-    print("\nPlayer 1 starting draw.")
-    for i in range(5):
-        draw_card(players[0])
-    print("\nPlayer 2 starting draw.")
-    for i in range(5):
-        draw_card(players[1])
-    print
-    
-def do_player_move(player, board):
+   
+def do_player_move(player, opponent, board):
     """Displays all possible moves then gets the players input.
 
     Calls the relevant function depending on the choice.
@@ -226,8 +213,6 @@ def do_player_move(player, board):
                 side = 0
 
             board[player.number][side][choice] = None
-
-
     return player, board
 
 if __name__ == '__main__':

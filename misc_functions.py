@@ -8,7 +8,10 @@ def print_intro_text():
 
 def coin_toss():
     """Randomly returns a 0 or 1"""
-    return randint(0,1)
+    toss = randint(0,1)
+    print("Player {0} is first.\n".format(toss + 1))
+
+    return toss
 
 def print_card_details(card):
     """Prints all attributes of a card."""
@@ -46,3 +49,22 @@ def discard_excess_from_hand(hand):
         print("Discarding {0}...".format(hand[discard].title))
         del hand[discard]
     return hand
+
+def starting_draw(players):
+    """Makes both players draw 5 cards."""
+
+    print("\nPlayer 1 starting draw.")
+    for i in range(5):
+        draw_card(players[0])
+    print("\nPlayer 2 starting draw.")
+    for i in range(5):
+        draw_card(players[1])
+    print()
+
+def draw_card(player):
+    """Adds the top card from the deck to the hand."""
+
+    player.hand.append(player.deck[0])
+    print("Player {0} drew a [{1}].".format(player.number + 1,
+                                          player.deck[0].title))
+    del player.deck[0]
