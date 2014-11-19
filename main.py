@@ -1,6 +1,9 @@
+from __future__ import print_function
+
 from random import randint, shuffle
 from card_class import Card
 from player_class import Player
+from misc_functions import print_intro_text, shuffle_decks, coin_toss
 
 try:
     input = raw_input
@@ -13,7 +16,7 @@ def main():
     players: list of two player objects
     board: list with two lists that each have two lists of 5 slots
     """
-    print("It's time to Duh-Duh-Duh-Duh-D-D-D-D-D-D-D-D-Duelllllll!!!!!!")
+    print_intro_text()
 
     # Setting up players
     players = [Player(0), Player(1)]
@@ -98,17 +101,7 @@ def starting_draw(players):
     for i in range(5):
         draw_card(players[1])
     print
-
-def shuffle_decks(players):
-    """Shuffles the deck and returns it."""
-    shuffle(players[0].deck)
-    shuffle(players[1].deck)
-    return players
-
-def coin_toss():
-    """Randomly returns a 0 or 1"""
-    return randint(0,1)
-
+    
 def do_player_move(player, board):
     """Displays all possible moves then gets the players input.
 
@@ -250,140 +243,6 @@ def do_player_move(player, board):
 
 
     return player, board
-
-def print_and_get_player_move():
-    """Prints all possibel moves and asks for the player's choice."""
-
-    print("""
-####################    ###################   #############################
-##     Player     ##    ##      Hand     ##   ##         Field           ##
-####################    ###################   #############################
--2: Surrender           1: View hand          5: View full field
--1: End Turn            2: See card details   6: View your own field
-0:  Check life points   3: Discard Card       7: See card details
-                        4: Play Card          8: Attack with card
-                                              9: Sacrifice a card
-                                              10: Set a card to defence mode
-                                              11: Use effect of card
-                                              12: Activate Magic Card
-                                              13: Discard Card""")
-    return input("Make a choice: ")
-
-def print_hand(hand):
-    """Prints the title and type of each card in the hand."""
-    for index, card in enumerate(hand):
-        print("{0}: {1} ({2})".format(index, card.title, card.type))
-
-def print_hand_card_details(hand):
-    """Asks player which card they want a detailed description of."""
-    print_hand(hand)
-    card = int(input("Which card do you want the details of?\nCard: "))
-    print
-    print_card_details(hand[card])
-
-def print_card_details(card):
-    """Prints all attributes of a card."""
-
-    print("Title: [{0}]".format(card.title))
-    print("Type: [{0}]".format(card.type))
-    print("Description: {0}".format(card.description))
-    if card.type == "Monster":
-        print("Attack: [{0}]".format(card.attack))
-        print("Defence: [{0}]".format(card.defence))
-        
-        mode = "Attack Mode"
-        if card.defence_mode:
-            mode = "Defence Mode"
-        print("Mode: {0}".format(mode))
-
-def print_board(board):
-    """Prints an ascii representation of a board along with all cards."""
-    board_txt = ["","","",""]
-
-    for i, side in enumerate(board):
-        for j, type in enumerate(side):
-            for card in type:
-                if card == None:
-                    board_txt[(i * 2) + j] += "[ Nil card ] "
-                else:
-                    if card.face_down:
-                         board_txt[(i * 2) + j] += "[ Facedown ] "
-                    else:
-                        board_txt[(i * 2) + j] += "{0} ".format(card.short_title)
-
-    print("""
-Player One:
-Spell: {0}
-Monst: {1}
-
-Monst: {2}
-Spell: {3}
-Player 2:
-""".format(board_txt[1], board_txt[0], board_txt[2],
-                    board_txt[3]))
-
-def print_player_board(player_board):
-    board_txt = ["", ""]
-    
-    # Generating numbers for user to choose a card
-    top_row = bottom_row = ""
-    for i in range(5):
-        top_row += (" " * 12) + str(i)
-        bottom_row += (" " * 12) + str(i + 5)
-    
-
-    for j, type in enumerate(player_board):
-        for card in type:
-            if card == None:
-                board_txt[j] += "[ Nil card ] "
-            else:
-                board_txt[j] += "{0} ".format(card.short_title)
-
-    print("""
-{0}
-Monst: {1}
-Spell: {2}
-{3}
-""".format(top_row, board_txt[0], board_txt[1], bottom_row))
-
-def print_player_monsters(player_monster_board):
-    board_txt = ""
-
-    row_numbers = ""
-    for i in range(5):
-        row_numbers += (" " * 12) + str(i)
-
-    for card in player_monster_board:
-        if card == None:
-            board_txt += "[ Nil card ] "
-        else:
-            board_txt += "{0} ".format(card.short_title)
-
-    print("""
-{0}
-Monst: {1}
-""".format(row_numbers, board_txt))
-
-def place_card_on_board(player_board, card, normal_summoned):
-    """Places a card on the first available slot on the board.
-    
-    Be sure to remove the card afterwards."""
-    print("Playing: {0} ({1})".format(card.title, card.type))
-
-    board_side = 0 if card.type == "Monster" else 1
-    
-    if normal_summoned == True and board_side == 0:
-        print("You have already played a monster card.")
-        return player_board, False
-
-    for i in range(len(player_board[board_side])):
-        if player_board[board_side][i] == None:
-            player_board[board_side][i] = card
-            break
-        if player_board[board_side][4] != None:
-            print("No spare slots for that card.")
-            return player_board, False
-    return player_board, True
 
 if __name__ == '__main__':
     main()

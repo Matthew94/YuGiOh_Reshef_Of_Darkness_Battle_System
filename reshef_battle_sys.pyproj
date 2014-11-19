@@ -24,10 +24,11 @@
     <Content Include="battle_plan.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="battle_class.py" />
     <Compile Include="card_class.py" />
-    <Compile Include="import_cards.py" />
     <Compile Include="main.py" />
+    <Compile Include="misc_functions.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="player_class.py">
       <SubType>Code</SubType>
     </Compile>
