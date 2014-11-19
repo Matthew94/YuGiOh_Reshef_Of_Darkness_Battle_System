@@ -190,7 +190,11 @@ def do_player_move(player, board):
                 print("There is no card in that slot.")
         # Attack with a card
         elif move == '8':
-            pass
+            print_player_monsters(board[player.number][0])
+            choice = int(input("(-1 to quit)\nChoose a monster to attack with: "))
+
+
+
         # sacrifice a card
         elif move == '9':
             print_player_monsters(board[player.number][0])
